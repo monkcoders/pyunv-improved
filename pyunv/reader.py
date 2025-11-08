@@ -83,6 +83,8 @@ class Reader(object):
     def __init__(self, f):
         super(Reader, self).__init__()
         self.file = f
+        self.extracted_dir_path = self.unzip_unv_file()
+
         self.find_content_offsets()
         self.universe = Universe()
         self.universe.parameters = self.read_parameters()
@@ -92,7 +94,7 @@ class Reader(object):
         self.universe.virtual_tables = self.read_virtual_tables()
         self.universe.columns = self.read_columns()
         self.universe.columns.sort(key=lambda c: c.id_)
-        #self.universe.column_attributes = self.read_column_attributes()
+        self.universe.column_attributes = self.read_column_attributes()
         self.universe.joins = self.read_joins()
         self.universe.contexts = self.read_contexts()
         self.universe.links = self.read_links()
@@ -251,7 +253,6 @@ class Reader(object):
             self.universe.windows_page_format = None
         self.universe.classes = self.read_classes()
         self.universe.build_object_map()
-        self.extracted_dir_path = self.unzip_unv_file()
         # Perform additional analysis
         self.parse_unw_storage_data()
         self.parse_resource_header_data()
@@ -455,10 +456,54 @@ class Reader(object):
         column_count2, = struct.unpack('<I', self.file.read(4))
         #print('count1 %d  count2 %d' % (column_count, column_count2))
         return [self.read_column() for x in range(column_count2)]
+
     
     def read_column_attributes(self):
-        """read the column attributes (after marker Columns;)"""
-        pass
+        """read a column definition from the universe file
+
+        I column_id
+        I table_id
+        S column_name
+        B datatype_code (0x02=Numeric, 0x03=String, 0x04=Date, etc.)
+        10B metadata/flags
+        
+        """
+        self.file.seek(self.content_offsets['Columns;'])
+        
+        # Group columns by table
+        for table in self.universe.tables:
+            table_columns = {col.name: col for col in self.universe.columns if col.parent and col.parent.id_ == table.id_}
+            column_count, = struct.unpack('<I', self.file.read(4))
+            for i in range(column_count):
+                # id_, = struct.unpack('<I', self.file.read(4))
+                # table_id, = struct.unpack('<I', self.file.read(4))
+                # parent = self.universe.table_map.get(id_, None)  # Use get() to handle missing tables
+                name = self.read_string()
+
+                # Read datatype code (1 byte)
+                datatype_code, = struct.unpack('<B', self.file.read(1))
+                
+                # Map datatype code to human-readable name
+                DATATYPE_MAP = {
+                    0x01: 'Unknown',
+                    0x02: 'Numeric',
+                    0x03: 'String',
+                    0x04: 'Date',
+                    0x05: 'Boolean',
+                    0x06: 'Long'
+                }
+                datatype = DATATYPE_MAP.get(datatype_code, f'Unknown_{datatype_code:02x}')
+                
+                # Read metadata/flags (6 bytes based on pattern analysis)
+                # Pattern: \x01\x00\x00\x00\x00\x00
+                metadata = self.file.read(10)
+                curr_column = table_columns.get(name)
+                if(curr_column):
+                    curr_column.datatype = datatype
+                    curr_column.metadata = metadata
+                print(name, datatype, metadata)
+        
+        # return column
 
     def read_joins(self):
         """docstring for read_joins

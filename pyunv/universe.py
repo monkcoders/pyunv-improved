@@ -426,12 +426,13 @@ class VirtualTable(object):
 
 class Column(object):
     
-    def __init__(self, id_=None, name=None, parent=None, universe=None):
+    def __init__(self, id_=None, name=None, parent=None, universe=None, datatype=None):
         super(Column, self).__init__()
         self.id_ = id_
         self.name = name
         self.parent = parent
         self.universe = universe
+        self.datatype =datatype
     
     @property
     def fullname(self):
