@@ -1,0 +1,128 @@
+<%doc>
+    manifest.mako
+
+    This is the default Mako template for the PyUnv universe manifest file.
+    Customize this template, or replace it with your own.
+
+    Copyright (c) 2009 David Peckham. All rights reserved.
+</%doc>
+    <%page args="universe"/>
+    Universe Manifest created by pyunv ${universe.pyunv_version}
+        <% parms = universe.parameters %>
+        Name: ${parms.universe_name}
+        Filename: ${parms.universe_filename}.unv
+        Description: ${parms.description}
+        Domain: ${parms.domain}
+
+    General Information
+
+        Created by: ${parms.created_by} on ${parms.created_date}
+        Modified by: ${parms.modified_by} on ${parms.modified_date}
+        Comments: ${parms.comments}
+        Revision ${parms.revision}
+        Statistics: ${universe.statistics['classes']} classes
+                    ${universe.statistics['objects']} objects
+                    ${universe.statistics['tables']} tables
+                    ${universe.statistics['aliases']} aliases
+                    ${universe.statistics['joins']} joins
+                    ${universe.statistics['contexts']} contexts
+                    ${universe.statistics['conditions']} conditions
+
+    Connection
+
+        Database engine: ${parms.dbms_engine}
+        Network layer: ${parms.network_layer}
+
+    Strategies
+
+        Object strategy: ${parms.object_strategy}
+
+    Controls
+
+        Query time limit: ${parms.query_time_limit} minutes
+        Query row limit: ${parms.query_row_limit} rows
+        Cost estimate warning limit: ${parms.cost_estimate_warning_limit} minutes
+        Long text limit: ${parms.long_text_limit} characters
+
+    SQL Parameters
+
+    % for name, value in universe.custom_parameters.items():
+        ${name} = ${value}
+    % endfor
+
+    Links
+
+    % for link in universe.links:
+        ${link.name}   id: ${link.id_}, description: ${link.description}, linked_universe: ${link.linked_universe}
+    % endfor
+
+    Objects
+    % for uclass in universe.classes:
+        ${write_class_objects(uclass, 1)} \
+    % endfor
+    <%def name="write_class_objects(uclass, level)">
+        ${uclass.name}
+        % for obj in uclass.objects:
+            ${obj.name}   id: ${obj.id_}, visible: ${obj.visible}, description: ${obj.description}, select: ${obj.select_sql}, where: ${obj.where_sql}
+        % endfor
+        <% level = level+1 %> \
+        % for subclass in uclass.subclasses:
+            ${write_class_objects(subclass, level)} \
+        % endfor
+    </%def>
+    Conditions
+    % for uclass in universe.classes:
+        ${write_class_conditions(uclass, 1)} \
+    % endfor
+    <%def name="write_class_conditions(uclass, level)">
+        ${uclass.name}
+        % for condition in uclass.conditions:
+            ${condition.name}   id: ${condition.id_}, description: ${condition.description}, where: ${condition.where_sql}
+        % endfor
+        <% level = level+1 %> \
+        % for subclass in uclass.subclasses:
+            ${write_class_conditions(subclass, level)} \
+        % endfor
+    </%def>
+    Hierarchies
+
+    % for hierarchy in universe.hierarchies:
+        ${hierarchy.name}   id: ${hierarchy.id_}, description: ${hierarchy.description}, levels: ${hierarchy.levels}
+    % endfor
+
+    Tables
+
+    % for table in universe.tables:
+        ${table.fullname}   id: ${table.id_}
+    % endfor
+
+    Columns
+    
+    % for column in universe.columns:
+        ${column.fullname}   id: ${column.id_}
+    % endfor
+
+    Joins
+
+    % for join in universe.joins:
+        ${join.statement}   id: ${join.id_} 
+    % endfor
+    
+    Contexts
+    
+    % for c in universe.contexts:
+        ${c.name}   id: ${c.id_}, description: ${c.description}, joins: ${c.join_list} 
+    % endfor
+
+    Stored Procedure Parameters
+
+    % if universe.stored_procedure_parameters:
+        % for proc_name, parameters in universe.stored_procedure_parameters.items():
+            ${proc_name}:
+            % for param in parameters:
+                - Name: ${param['name']}, Type: ${param['type']}, Default Value: ${param['value']}
+            % endfor
+        % endfor
+    % else:
+        None found
+    % endif

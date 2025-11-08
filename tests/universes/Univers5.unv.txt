@@ -1,0 +1,85 @@
+
+    
+    Universe Manifest created by pyunv 0.3.0
+        
+        Name: Univers5
+        Filename: Univers5.unv
+        Description: None
+        Domain: None
+
+    General Information
+
+        Created by: Administrator on 2025-10-13
+        Modified by: Administrator on 2025-10-13
+        Comments: None
+        Revision 2
+        Statistics: 1 classes
+                    5 objects
+                    1 tables
+                    0 aliases
+                    0 joins
+                    0 contexts
+                    0 conditions
+
+    Connection
+
+        Database engine: MS SQL Server 2019
+        Network layer: ODBC
+
+    Strategies
+
+        Object strategy: None
+
+    Controls
+
+        Query time limit: 10.0 minutes
+        Query row limit: 5000 rows
+        Cost estimate warning limit: 5.0 minutes
+        Long text limit: 1000 characters
+
+    SQL Parameters
+
+        STORED_PROC_UNIVERSE = Yes
+
+    Links
+
+
+    Objects
+        
+        Getemployeesbydeptandsalary;12
+            Empid   id: 1, visible: True, description: None, select: EmployeesByDeptAndSalary.EmpID, where: None
+            Empname   id: 2, visible: True, description: None, select: EmployeesByDeptAndSalary.EmpName, where: None
+            Salary   id: 3, visible: True, description: None, select: EmployeesByDeptAndSalary.Salary, where: None
+            Deptname   id: 4, visible: True, description: None, select: EmployeesByDeptAndSalary.DeptName, where: None
+            Hiredate   id: 5, visible: True, description: None, select: EmployeesByDeptAndSalary.HireDate, where: None
+                  
+    Conditions
+        
+        Getemployeesbydeptandsalary;12
+                  
+    Hierarchies
+
+
+    Tables
+
+        EmployeesByDeptAndSalary   id: 1
+
+    Columns
+    
+        EmployeesByDeptAndSalary.EmpID   id: 1
+        EmployeesByDeptAndSalary.EmpName   id: 2
+        EmployeesByDeptAndSalary.Salary   id: 3
+        EmployeesByDeptAndSalary.DeptName   id: 4
+        EmployeesByDeptAndSalary.HireDate   id: 5
+
+    Joins
+
+    
+    Contexts
+    
+
+    Stored Procedure Parameters
+
+            GetEmployeesByDeptAndSalary;1:
+                - Name: @DeptID, Type: SInt32, Default Value: 1
+                - Name: @MinSalary, Type: Float64, Default Value: 35000

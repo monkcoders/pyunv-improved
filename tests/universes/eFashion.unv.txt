@@ -1,0 +1,267 @@
+
+    
+    Universe Manifest created by pyunv 0.3.0
+        
+        Name: eFashion
+        Filename: eFashion.unv
+        Description: eFashion retail Data Warehouse dated 14 Oct 2007. 89,000+ row fact table.Version 13
+        Domain: None
+
+    General Information
+
+        Created by: Administrator on 2025-09-01
+        Modified by: Administrator on 2025-09-22
+        Comments: eFashion Data Warehouse Demo created by G.Bowman October 1998. Copyright Business Objects 1998.              DB details: 89,000 line fact table, 10 line promotions 2nd fact table, dual article lookup tables for performance, 2 isolated aggregate tables for demo purposesUpdated by Glynn Naughton March 2002 to reflect updates to the database (some columns added, others renamed).
+        Revision 128
+        Statistics: 6 classes
+                    41 objects
+                    4 tables
+                    6 aliases
+                    9 joins
+                    2 contexts
+                    12 conditions
+
+    Connection
+
+        Database engine: MS Access 2007
+        Network layer: ODBC
+
+    Strategies
+
+        Object strategy: (Built-in) Standard Renaming
+
+    Controls
+
+        Query time limit: 5.0 minutes
+        Query row limit: 90000 rows
+        Cost estimate warning limit: 5.0 minutes
+        Long text limit: 1000 characters
+
+    SQL Parameters
+
+        ANSI92 = No
+        AUTO_UPDATE_QUERY = No
+        BLOB_COMPARISON = No
+        BOUNDARY_WEIGHT_TABLE = -1
+        COLUMNS_SORT = No
+        COMBINED_WITH_SYNCHRO = No
+        COMBINE_WITHOUT_PARENTHESIS = No
+        CORE_ORDER_PRIORITY = No
+        CORRECT_AGGREGATED_CONDITIONS_IF_DRILL = No
+        CUMULATIVE_OBJECT_WHERE = No
+        DECIMAL_COMMA = No
+        DISTINCT_VALUES = DISTINCT
+        END_SQL = None
+        EVAL_WITHOUT_PARENTHESIS = No
+        FILTER_IN_FROM = No
+        FIRST_LOCAL_CLASS_PRIORITY = No
+        FORCE_SORTED_LOV = No
+        MAX_INLIST_VALUES = 999
+        PATH_FINDER_4X = N
+        REPLACE_COMMA_BY_CONCAT = No
+        SHORTCUT_BEHAVIOR = Successive
+        THOROUGH_PARSE = No
+        UNICODE_STRINGS = No
+
+    Links
+
+
+    Objects
+        
+        Time period
+            Year   id: 188, visible: True, description: Year 2003 - 2006., select: @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Yr,Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Yr,Calendar_year_lookup.Yr), where: None
+            Fiscal Period   id: 187, visible: True, description: Year FY99 - FY01, select: Calendar_year_lookup.Fiscal_period, where: None
+            Quarter   id: 186, visible: True, description: Quarter number: Q1, Q2, Q3, Q4., select: @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Qtr,Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Qtr,{fn concat('Q',Calendar_year_lookup.Qtr)}), where: None
+            Month   id: 185, visible: True, description: Month number in year, 1-12., select: @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Mth,Calendar_year_lookup.Mth), where: None
+            Month Name   id: 196, visible: True, description: Month name, January-December., select: @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Month_name,Calendar_year_lookup.Month_Name), where: None
+            Week   id: 260, visible: True, description: Week1-53. Week 53 may overlap with week 1 of the following year., select: @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Wk,Calendar_year_lookup.Week_in_year), where: None
+            Year/week   id: 502, visible: True, description: Week 2003/1 to 2006/53 - Unique year and week describing date. Use this to create conditions across year boundaries. i.e. Christmas period = 2003/52 to 2006/1., select: Calendar_year_lookup.Year_Week, where: None
+            Holiday (y/n)   id: 290, visible: True, description: Holiday flag in week. Y=US public holiday during the time period, N=No holiday. Can be mixed with any time period dimension., select: ucase(Calendar_year_lookup.Holiday_Flag), where: None
+                      
+        Store
+            State   id: 218, visible: True, description: State located., select: @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.State,Outlet_Lookup.State), where: None
+            City   id: 166, visible: True, description: City located., select: @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.City,Outlet_Lookup.City), where: None
+            Store name   id: 376, visible: True, description: Name of store., select: @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Store_name,Outlet_Lookup.Shop_name), where: None
+            Zip Code   id: 219, visible: True, description: Zip code, select: Outlet_Lookup.Zip_code, where: None
+            Address   id: 378, visible: True, description: Address of store, select: Outlet_Lookup.Address_1, where: None
+                     
+        Store details
+            Long opening hours   id: 62, visible: True, description: Y=Late night opening, N=Normal store hours., select: Outlet_Lookup.Long_opening_hours_flag, where: None
+            Name of manager   id: 60, visible: True, description: Manager's name., select: Outlet_Lookup.Manager, where: None
+            Opening date   id: 61, visible: True, description: Date store opened., select: Outlet_Lookup.Date_open, where: None
+            Owned (y/n)   id: 63, visible: True, description: Y=Wholly owned by e-Fashion, N=Franchise, select: Outlet_Lookup.Owned_outright_flag, where: None
+            Sales floor size group   id: 214, visible: True, description: Sales floor size group: 0-999, 1000-1999, 2000-2999, 3000-3999, 4000-4999, 5000+., select: IIf(Outlet_Lookup.Floor_space>=1000, IIf(Outlet_Lookup.Floor_space>=2000, IIf(Outlet_Lookup.Floor_space>=3000, IIf(Outlet_Lookup.Floor_space>=4000, IIf(Outlet_Lookup.Floor_space>=5000, '5000 +','4000-4999'),'3000-3999'), '2000-2999'),'1000-1999') ,'0-999'), where: None
+            Sales floor size sqFt   id: 64, visible: True, description: Actual sales floor size in sqFt, select: Outlet_Lookup.Floor_space, where: None
+            Extended sales floor size   id: 314, visible: True, description: Summed sales floor size. Can only be mixed with geography information relating to a store or group of stores. It cannot be used to show the SqFt of a store over time for instance., select: sum (Outlet_Lookup.Floor_space), where: None
+                           
+        Product
+            Lines   id: 165, visible: True, description: Product line. Each line contains a set of categories., select: @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Line,Article_lookup.Family_name,Article_Color_Lookup.Family_name), where: None
+            Category   id: 508, visible: True, description: Each category contains the individual SKU codes (and product descriptions)., select: @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Category,Article_lookup.Category,Article_Color_Lookup.Category), where: None
+            SKU number   id: 216, visible: True, description: Stock Keeping Unit number (SKU).The lowest level of product description., select: @aggregate_aware(Article_lookup.Article_id,Article_Color_Lookup.Article_id), where: None
+            Label   id: 468, visible: True, description: Detailed information about each product, select: {fn concat(UnknownTable_9.Criteria_Type_Label,{fn concat(': ',UnknownTable_9.Criteria_label)})}, where: None
+            SKU desc   id: 152, visible: True, description: Stock Keeping Unit description (SKU). Lowest level of product description. Each product comes in several different colors., select: @aggregate_aware(Article_lookup.Article_label,Article_Color_Lookup.Article_label), where: None
+            Color   id: 153, visible: True, description: Color of an article. Each SKU number has many color variations (there is not a unique SKU for each color). Color is not compatible with Product Promotions, only SKU., select: UnknownTable_7.Color_label, where: None
+            Color number   id: 440, visible: True, description: Official color number. Object incompatible with Product Promotions., select: UnknownTable_7.Color_code, where: None
+            Unit Price MSRP   id: 154, visible: True, description: This is the manufacturers suggested retail price per SKU and color., select: @aggregate_aware(Article_lookup.Sale_price,Article_Color_Lookup.Sale_price), where: None
+            Extended price   id: 194, visible: True, description: The extended price let's you display the sum of prices over another dimension (such as outlet). When used with SKU number all the color variations (of each SKU) are added together., select: @aggregate_aware(sum(Article_lookup.Sale_price),sum(Article_Color_Lookup.Sale_price)), where: None
+            Sold at (unit price)   id: 323, visible: True, description: This is the actual unit price per SKU obtained at sale time (i.e. Revenue/Quantity), select: IIf(Measures.Sales revenue>0,    IIf(Measures.Quantity sold>=0,       Measures.Sales revenue/Measures.Quantity sold)), where: None
+                      
+        Promotions
+            Promotion (y/n)   id: 266, visible: True, description: Promotion flag (yes or no) by SKU unit., select: UnknownTable_16.Promotion_flag, where: None
+            Print   id: 267, visible: True, description: Appear in print (yes or no)?, select: UnknownTable_16.print_flag, where: None
+            Radio   id: 268, visible: True, description: Appear in radio (yes or no)?, select: UnknownTable_16.radio_flag, where: None
+            Television   id: 269, visible: True, description: Appear on television (yes or no)?, select: UnknownTable_16.television_flag, where: None
+            Direct mail   id: 270, visible: True, description: Appear in direct mail (yes or no)?, select: UnknownTable_16.direct_mail_flag, where: None
+            Duration   id: 261, visible: True, description: Duration in weeks of promotion., select: UnknownTable_15.Duration, where: None
+            Promotion Cost USD   id: 262, visible: True, description: Cost of promoting the SKU (in US dollars)., select: sum(UnknownTable_15.promotion_cost), where: None
+                      
+        Measures
+            Sales revenue   id: 147, visible: True, description: Sales revenue $ - $ revenue of SKU sold, select: @aggregate_aware(sum(Agg_yr_qt_rn_st_ln_ca_sr.Sales_revenue),sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Sales_revenue),sum(Shop_facts.Amount_sold)), where: None
+            Quantity sold   id: 148, visible: True, description: Quantity sold - number of SKU sold, select: @aggregate_aware(sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Quantity_sold),sum(Shop_facts.Quantity_sold)), where: None
+            Margin   id: 146, visible: True, description: Margin $ = Revenue - Cost of sales, select: @aggregate_aware(sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Margin),sum(Shop_facts.Margin)), where: None
+            Discount   id: 191, visible: True, description: Total discount of a SKU. Discount= Qty * Unit Price - Revenue.  Negative sums indicate the product was marked up (increased margin). Note discount is a calculated object (it does not exist in the fact table)., select: @aggregate_aware(sum(Shop_facts.Quantity_sold * Article_lookup.Sale_price - Shop_facts.Amount_sold),sum(Shop_facts.Quantity_sold * Article_Color_Lookup.Sale_price - Shop_facts.Amount_sold)), where: UnknownTable_4.week_id=Calendar_year_lookup.Week_id
+                  
+    Conditions
+        
+        Time period
+            Last year   id: 2, description: Show last year results only - year 2005, where: Calendar_year_lookup.Yr = '2005'
+            This year   id: 1, description: Show this year results only - year 2006, where: Calendar_year_lookup.Yr= '2006'
+            Christmas period   id: 3, description: Filter for Christmas rush period - Weeks 46 to 52 (incl. occasional week 53), where: Calendar_year_lookup.Week_In_Year BETWEEN 46  AND 53
+            Holiday period   id: 11, description: Filter for weeks that contain  holiday periods, where: ucase(Calendar_year_lookup.Holiday_Flag) = 'Y'
+                      
+        Store
+            Sales floor size?   id: 6, description: Prompt for sales floor group - '0-99','100-199','200-299','300-399','400-499','500+, where: IIf(Outlet_Lookup.Floor_space>=100, IIf(Outlet_Lookup.Floor_space>=200, IIf(Outlet_Lookup.Floor_space>=300, IIf(Outlet_Lookup.Floor_space>=400, IIf(Outlet_Lookup.Floor_space>=500, '500 +','400-499'),'300-399'), '200-299'),'100-199') ,'0-99') IN @Prompt ('Sales flloor size sqFt?','A',{'0-99','100-199','200-299','300-399','400-499','500+'},MULTI,CONSTRAINED)
+            Owned stores   id: 12, description: Filter for wholly owned stores, rather than franchises, where: @select(Store details\Owned (y/n)) = 'Y'
+            Stores with long opening hours   id: 13, description: Filter for stores with long opening hours, where: @select(Store details\Long opening hours) = 'Y'
+                     
+        Store details
+                           
+        Product
+            Prompt for a line item?   id: 9, description: None, where: UnknownTable_7.Family_name IN @Prompt ('Choose a line to analyze?','A',{'Accessories','City Skirts','City Trousers','Dresses','Jackets','Leather','Outerwear','Overcoats','Shirt waist','Sweaters','Sweat-T-Shirts','Trousers'},MULTI,CONSTRAINED)
+            Which category?   id: 8, description: Prompt for the product category, where: UnknownTable_7.Category IN @Prompt ('Choose a category to analyze?','A',{'2 Pocket shirts','Belts,bags,wallets','Bermudas','Boatwear','Cardigan','Casual dresses','Day wear','Dry wear','Evening wear','Fancy fabric','Full length','Hair accessories','Hats,gloves,scarfs','Jackets','Jeans','Jewelry','Long lounge pants','Long sleeve','Lounge wear','Mini city','Night wear','Outdoor','Pants','Party pants','Samples','Shirts','Short sleeve','Skirts','Soft fabric','Sweater dresses','Sweats','T-Shirts','Turtleneck','Wet wear'},MULTI,CONSTRAINED)
+            Which product?   id: 10, description: Prompt for the product description name., where: UnknownTable_7.Article_label IN @Prompt('Choose the product descriptions to analyze:','A','Product\SKU desc',MULTI,CONSTRAINED)
+                      
+        Promotions
+                      
+        Measures
+            Sales present   id: 15, description: Sales were present. Must be combined with a detailed object to make any sense. Example Year +  'Sales Present' AND 'SKU desc=E-Watches' to see which years revenue was generated for E- Watches., where: UnknownTable_4.Amount_sold IS NOT NULL
+            Sales not present   id: 16, description: Sales were not present. Must be combined with a detailed object to make any sense. Example Year +  'Sales not Present' AND 'SKU desc=E-Watches' to see which years no revenue was generated for E- Watches., where: UnknownTable_4.Amount_sold IS NULL
+                  
+    Hierarchies
+
+
+    Tables
+
+        Calendar_year_lookup   id: 19
+        Outlet_Lookup   id: 3
+        Agg_yr_qt_rn_st_ln_ca_sr   id: 37
+                id: 167772160
+        Unknown   id: 262144
+          ^       Article   id: 0
+        Unknown   id: 0
+        r_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma                          "     ?     :  @      =   >   z          <                  C                                	                        '       5       Article_Color_Lookup                           :     	                   Article_Lookup_Criteria             :          =      N       product_promotion_facts             @      :  z     ?   =   <   >              x          _   /   i   7    promotion_lookup                      x  z  >   <      ?      @   :    =      PK    F6[ڊy2  2     XML-LOV;       <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="153" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="187" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="188" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION> x   <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="376" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>    <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="468" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>    <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="502" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="196" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="214" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="216" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="166" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="218" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>    <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="508" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="185" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="152" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION>     <LOV_SPECIFICATION> <LOV_PROPERTIES Display="Tabular" Distinct="Y" Max_Lines="90000" Max_Time="300" /> <LOV_QUERY> <REQUEST Type="Main" Name="Query" > <RESULTS> <RESULT Id="186" /> </RESULTS> </REQUEST> </LOV_QUERY></LOV_SPECIFICATION> PK    F6[I.٣M  M     Objects;               Time period     Time hierarchy              Year    Year 2003 - 2006.    s @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Yr,Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Yr,Calendar_year_lookup.Yr)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&4~&0~&525057~&STY_~&_STYFIELDS~&525057~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&0~&0~&0~&-1~&-1~&-1~&-1~&~&~&~&~&~&~&~&NF_~&SIMSTY_~& year05df                                                        Fiscal Period    Year FY99 - FY01       19.Fiscal_period    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&0~&0~&0~&-1~&-1~&-1~&-1~&~&~&~&~&~&~&~&NF_~&SIMSTY_~& fisca05cV"                                                       Quarter    Quarter number: Q1, Q2, Q3, Q4.     @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Qtr,Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Qtr,{fn concat('Q',Calendar_year_lookup.Qtr)})    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&0~&~&~&~&~&~&~&NF_~&SIMSTY_~& quart05bf                                                        Month    Month number in year, 1-12.    W @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Mth,Calendar_year_lookup.Mth)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&0~&~&~&~&~&~&~&NF_~&SIMSTY_~& month05af                                                       Month Name    Month name, January-December.    e @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Month_name,Calendar_year_lookup.Month_Name)       month05lF                                                      Week   @ Week1-53. Week 53 may overlap with week 1 of the following year.    _ @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Wk,Calendar_year_lookup.Week_in_year)       week07ff                                                      	 Year/week    Week 2003/1 to 2006/53 - Unique year and week describing date. Use this to create conditions across year boundaries. i.e. Christmas period = 2003/52 to 2006/1.       19.Year_Week       year_0ecV"                                                  "   Holiday (y/n)   | Holiday flag in week. Y=US public holiday during the time period, N=No holiday. Can be mixed with any time period dimension.       ucase(19.Holiday_Flag)       holid08af"                                                          	 Last year   ' Show last year results only - year 2005       19.Yr = '2005'   	 This year   ' Show this year results only - year 2006       19.Yr= '2006'    Christmas period   L Filter for Christmas rush period - Weeks 46 to 52 (incl. occasional week 53)      # 19.Week_In_Year BETWEEN 46  AND 53    Holiday period   . Filter for weeks that contain  holiday periods       ucase(19.Holiday_Flag) = 'Y'        Store     Geography and store hierarchy.              State    State located.    H @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.State,Outlet_Lookup.State)       state068f                                                )       City    City located.    R @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.City,Outlet_Lookup.City)       ville01vf                                                *   x   Store name    Name of store.    ] @aggregate_aware(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Store_name,Outlet_Lookup.Shop_name)       nom_m01kf                                                       Zip Code    Zip code       3.Zip_code    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&0~&~&~&~&~&~&~&NF_~&SIMSTY_~& zip_c069V"                                   x              z   Address    Address of store       3.Address_1       adres01oV"                                    x                     Sales floor size?   S Prompt for sales floor group - '0-99','100-199','200-299','300-399','400-499','500+      /IIf(3.Floor_space>=100, IIf(3.Floor_space>=200, IIf(3.Floor_space>=300, IIf(3.Floor_space>=400, IIf(3.Floor_space>=500, '500 +','400-499'),'300-399'), '200-299'),'100-199') ,'0-99') IN @Prompt ('Sales flloor size sqFt?','A',{'0-99','100-199','200-299','300-399','400-499','500+'},MULTI,CONSTRAINED)    Owned stores   6 Filter for wholly owned stores, rather than franchises    ( @select(Store details\Owned (y/n)) = 'Y'    Stores with long opening hours   ) Filter for stores with long opening hours    / @select(Store details\Long opening hours) = 'Y'       Store details   & Store details referring to Store name.          >    Long opening hours   + Y=Late night opening, N=Normal store hours.       3.Long_opening_hours_flag    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&0~&~&~&~&~&~&~&NF_~&SIMSTY_~& ouver01rv"                                                    <    Name of manager    Manager's name.       3.Manager       respo01pv"                                                    =    Opening date    Date store opened.       3.Date_open       date_01qv"                                                    ?    Owned (y/n)   ( Y=Wholly owned by e-Fashion, N=Franchise       3.Owned_outright_flag       propr01sv"                                                        Sales floor size group   Q Sales floor size group: 0-999, 1000-1999, 2000-2999, 3000-3999, 4000-4999, 5000+.       IIf(3.Floor_space>=1000, IIf(3.Floor_space>=2000, IIf(3.Floor_space>=3000, IIf(3.Floor_space>=4000, IIf(3.Floor_space>=5000, '5000 +','4000-4999'),'3000-3999'), '2000-2999'),'1000-1999') ,'0-999')    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&#,##000 Sqft~&~&~&~&~&~&~&NF_~&SIMSTY_~& surfa01tf"                                                    @    Sales floor size sqFt    Actual sales floor size in sqFt       3.Floor_space    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&#,##000 Sqft~&~&~&~&~&~&~&NF_~&SIMSTY_~& surfa01tV"                                                   :   Extended sales floor size    Summed sales floor size. Can only be mixed with geography information relating to a store or group of stores. It cannot be used to show the SqFt of a store over time for instance.       sum (3.Floor_space)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&#,##000 Sqft~&~&~&~&~&~&~&NF_~&SIMSTY_~& surfa01tG2                                                               Product     Product Hierarchy              Lines   5 Product line. Each line contains a set of categories.    q @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Line,Article_lookup.Family_name,Article_Color_Lookup.Family_name)       libel04pf                                                       Category   K Each category contains the individual SKU codes (and product descriptions).    o @aggregate_aware(Agg_yr_qt_rn_st_ln_ca_sr.Category,Article_lookup.Category,Article_Color_Lookup.Category)       categ0eif                                                        SKU number   H Stock Keeping Unit number (SKU).The lowest level of product description.    O @aggregate_aware(Article_lookup.Article_id,Article_Color_Lookup.Article_id)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&#,##0~&~&~&~&~&~&~&NF_~&SIMSTY_~& artic066f                                                       Label   ' Detailed information about each product 	     I {fn concat(9.Criteria_Type_Label,{fn concat(': ',9.Criteria_label)})}       objec0ddF"                                                       SKU desc   z Stock Keeping Unit description (SKU). Lowest level of product description. Each product comes in several different colors.    U @aggregate_aware(Article_lookup.Article_label,Article_Color_Lookup.Article_label)       libel04cf                                                        Color    Color of an article. Each SKU number has many color variations (there is not a unique SKU for each color). Color is not compatible with Product Promotions, only SKU.       7.Color_label       libel04dv"                                                       Color number   C Official color number. Object incompatible with Product Promotions.       7.Color_code    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&-1~&0~&~&~&~&~&~&~&NF_~&SIMSTY_~& color0ckV"                                                       Unit Price MSRP   C This is the manufacturers suggested retail price per SKU and color.    O @aggregate_aware(Article_lookup.Sale_price,Article_Color_Lookup.Sale_price)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&-1~&-1~&-1~&$#,##0.00~&~&~&~&~&~&~&NF_~&SIMSTY_~& prix_04ef                                                        Extended price    The extended price let's you display the sum of prices over another dimension (such as outlet). When used with SKU number all the color variations (of each SKU) are added together.    Y @aggregate_aware(sum(Article_lookup.Sale_price),sum(Article_Color_Lookup.Sale_price))    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&-1~&-1~&-1~&$#,##0.00~&~&~&~&~&~&~&NF_~&SIMSTY_~& prix_04eF                                                   C   Sold at (unit price)   S This is the actual unit price per SKU obtained at sale time (i.e. Revenue/Quantity)         1 IIf(147>0,    IIf(148>=0,       147/148))    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&-1~&-1~&-1~&$#,##0.00~&~&~&~&~&~&~&NF_~&SIMSTY_~& objec0982                                                      	    Prompt for a line item?            7.Family_name IN @Prompt ('Choose a line to analyze?','A',{'Accessories','City Skirts','City Trousers','Dresses','Jackets','Leather','Outerwear','Overcoats','Shirt waist','Sweaters','Sweat-T-Shirts','Trousers'},MULTI,CONSTRAINED)    Which category?    Prompt for the product category      7.Category IN @Prompt ('Choose a category to analyze?','A',{'2 Pocket shirts','Belts,bags,wallets','Bermudas','Boatwear','Cardigan','Casual dresses','Day wear','Dry wear','Evening wear','Fancy fabric','Full length','Hair accessories','Hats,gloves,scarfs','Jackets','Jeans','Jewelry','Long lounge pants','Long sleeve','Lounge wear','Mini city','Night wear','Outdoor','Pants','Party pants','Samples','Shirts','Short sleeve','Skirts','Soft fabric','Sweater dresses','Sweats','T-Shirts','Turtleneck','Wet wear'},MULTI,CONSTRAINED)    Which product?   ( Prompt for the product description name.      s 7.Article_label IN @Prompt('Choose the product descriptions to analyze:','A','Product\SKU desc',MULTI,CONSTRAINED)        Promotions    # Promotions by SKU number over time.             Promotion (y/n)   ' Promotion flag (yes or no) by SKU unit.       16.Promotion_flag       promo07lv"                                                       Print    Appear in print (yes or no)?       16.print_flag       print07mV"                                                     Radio    Appear in radio (yes or no)?       16.radio_flag       radio07nV"                                                     Television   ! Appear on television (yes or no)?       16.television_flag       telev07oV"                                                     Direct mail   " Appear in direct mail (yes or no)?       16.direct_mail_flag       direc07pV"                                                     Duration    Duration in weeks of promotion.       15.Duration       durat07gv"                                                       Promotion Cost USD   * Cost of promoting the SKU (in US dollars).       sum(15.promotion_cost)    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&2~&-1~&-1~&$#,##0~&$-#,##0~&~&~&~&~&~&NF_~&SIMSTY_~& promo07hG2                                                               Measures    ? 3 years historical view showing measures in both USD and Euros.              Sales revenue   ' Sales revenue $ - $ revenue of SKU sold     @aggregate_aware(sum(Agg_yr_qt_rn_st_ln_ca_sr.Sales_revenue),sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Sales_revenue),sum(Shop_facts.Amount_sold))    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&2~&-1~&8~&$#,##0~&$-#,##0~&~&Discontinued~&~&~&~&NF_~&SIMSTY_~& monta047F                                                       Quantity sold   " Quantity sold - number of SKU sold    k @aggregate_aware(sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Quantity_sold),sum(Shop_facts.Quantity_sold))    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&3~&0~&0~&-1~&-1~&-1~&8~&#,##0~&~&~&Discontinued~&~&~&~&NF_~&SIMSTY_~& quant048F                                                       Margin   " Margin $ = Revenue - Cost of sales    ] @aggregate_aware(sum(Agg_yr_qt_mt_mn_wk_rg_cy_sn_sr_qt_ma.Margin),sum(Shop_facts.Margin))    _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&2~&-1~&8~&$#,##0~&$-#,##0~&~&Discontinued~&~&~&~&NF_~&SIMSTY_~& marge046F                                                       Discount    Total discount of a SKU. Discount= Qty * Unit Price - Revenue.  Negative sums indicate the product was marked up (increased margin). Note discount is a calculated object (it does not exist in the fact table).          @aggregate_aware(sum(Shop_facts.Quantity_sold * Article_lookup.Sale_price - Shop_facts.Amount_sold),sum(Shop_facts.Quantity_sold * Article_Color_Lookup.Sale_price - Shop_facts.Amount_sold)) 4.week_id=19.Week_id  _FIXSETTING~&_SIMSTY~&_STY~&_RPTCOL~&1~&65280~&65280~&65280~&RPTCOL_~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&Arial~&12~&0~&0~&0~&0~&_RPTCOL~&1~&0~&0~&0~&RPTCOL_~&0~&0~&769~&STY_~&_STYFIELDS~&769~&0~&STYFIELDS_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_BOR~&1~&0~&1~&0~&0~&0~&BOR_~&_NF~&4~&0~&0~&-1~&2~&-1~&8~&$#,##0~&$-#,##0~&~&Discontinued~&~&~&~&NF_~&SIMSTY_~& objec05gF                                                          Sales present    Sales were present. Must be combined with a detailed object to make any sense. Example Year +  'Sales Present' AND 'SKU desc=E-Watches' to see which years revenue was generated for E- Watches.       4.Amount_sold IS NOT NULL    Sales not present    Sales were not present. Must be combined with a detailed object to make any sense. Example Year +  'Sales not Present' AND 'SKU desc=E-Watches' to see which years no revenue was generated for E- Watches.       4.Amount_sold IS NULL    PK    F6[Ky?  ?     Columns;	    Week_id         Week_In_Year         Yr         Fiscal_Period        	 Year_Week         Qtr         Month_Name         Mth         Holiday_Flag            Shop_id        	 Shop_name        	 Address_1         Manager        	 Date_open         Long_opening_hours_flag         Owned_outright_flag         Floor_space         Zip_code         City         State            agg2_id         Yr         Qtr         State         Line         Category         Sales_revenue            Shop_facts_id         Article_id         Color_code         Week_id         Shop_id         Margin         Amount_sold         Quantity_sold            Article_id         Article_label         Category         Sale_price         Family_name         Family_code            agg1_id         Yr         Qtr         Mth         Month_name         Wk         City         Store_name         Sales_revenue         Quantity_sold         Margin        	    Article_color_lookup_id         Article_id         Color_code         Article_label         Color_label         Category         Sale_price         Family_name         Family_code            Article_lookup_criteria_id         Article_id         Criteria         Criteria_type         Criteria_type_label         Criteria_label            Product_promotion_facts_id         Article_id         Week_id         Duration         Promotion_id         Promotion_cost            Promotion_id         Promotion_flag         Print_flag         Radio_flag         Television_flag         Direct_mail_flag        PK    F6[2  2     Columns Id;O   O   D   %    Yr3       Article_id"       Article_id   '    YrE   %    Qtr4       Color_code#       Week_id   '    Qtr       Week_idF   %    State5       Week_id$       Duration   '    Mth       Week_In_YearG   %    Line6       Shop_id%       Promotion_id   '    Month_name       YrH   %    Category7       Margin&       Promotion_cost   '    Wk       Fiscal_PeriodI   %    Sales_revenue8       Amount_sold'       Shop_id   '    City      	 Year_WeekJ   	    Article_lookup_criteria_id9       Quantity_sold(      	 Shop_name   '    Store_name       QtrK   	    Article_id:       Article_color_lookup_id)      	 Address_1   '    Sales_revenue       Month_NameL   	    Criteria;       Article_id*       Manager   '    Quantity_sold       MthM   	    Criteria_type<       Color_code+      	 Date_open   '    Margin	       Holiday_FlagN   	    Criteria_type_label=       Article_label,       Long_opening_hours_flag       Article_id       Promotion_idO   	    Criteria_label>       Color_label-       Owned_outright_flag       Article_label       Promotion_flag?       Category.       Floor_space       Category       Print_flag@       Sale_price/       Zip_code       Sale_price       Radio_flagA       Family_name0       City       Family_name       Television_flagB       Family_code1       State        Family_code       Direct_mail_flagC   %    agg2_id2       Shop_facts_id!       Product_promotion_facts_id   '    agg1_idPK    F6[i߁Y  Y     Object_Formats;   C                Arial                                                       BOFormat BOListLPBOFirst   	 BOTimeFmt                                       $                             Arial                                                                                        Arial                                                                                                      $                             Arial                                                                                      Arial                                                                                       $                                       $      Discontinued                  Arial                                                                                       $                                       $                         Arial                                                                                                      $            :                Arial                                                                                                         !     Sqft                             Arial                                                                                       $                                       $      Discontinued                   Arial                                                                                                         !     Sqft                             Arial                                                                                       $                                       $      Discontinued  >                 Arial                                                                                                  Arial                                                                                                       Discontinued                   Arial                                                                                                         @                 Arial                                                                                                         !     Sqft                            Arial                                                                                                  Arial            id: 525056
+        Unknown   id: 16777472
+        Unknown   id: 511
+
+    Columns
+    
+        Calendar_year_lookup.Week_id   id: 1
+        Calendar_year_lookup.Week_In_Year   id: 2
+        Calendar_year_lookup.Yr   id: 3
+        Calendar_year_lookup.Fiscal_Period   id: 4
+        Calendar_year_lookup.Year_Week   id: 5
+        Calendar_year_lookup.Qtr   id: 6
+        Calendar_year_lookup.Month_Name   id: 7
+        Calendar_year_lookup.Mth   id: 8
+        Calendar_year_lookup.Holiday_Flag   id: 9
+        Promotion_id   id: 10
+        Promotion_flag   id: 11
+        Print_flag   id: 12
+        Radio_flag   id: 13
+        Television_flag   id: 14
+        Direct_mail_flag   id: 15
+        agg1_id   id: 16
+        Yr   id: 17
+        Qtr   id: 18
+        Mth   id: 19
+        Month_name   id: 20
+        Wk   id: 21
+        City   id: 22
+        Store_name   id: 23
+        Sales_revenue   id: 24
+        Quantity_sold   id: 25
+        Margin   id: 26
+        Article_id   id: 27
+        Article_label   id: 28
+        Category   id: 29
+        Sale_price   id: 30
+        Family_name   id: 31
+        Family_code   id: 32
+        Product_promotion_facts_id   id: 33
+        Article_id   id: 34
+        Week_id   id: 35
+        Duration   id: 36
+        Promotion_id   id: 37
+        Promotion_cost   id: 38
+        Outlet_Lookup.Shop_id   id: 39
+        Outlet_Lookup.Shop_name   id: 40
+        Outlet_Lookup.Address_1   id: 41
+        Outlet_Lookup.Manager   id: 42
+        Outlet_Lookup.Date_open   id: 43
+        Outlet_Lookup.Long_opening_hours_flag   id: 44
+        Outlet_Lookup.Owned_outright_flag   id: 45
+        Outlet_Lookup.Floor_space   id: 46
+        Outlet_Lookup.Zip_code   id: 47
+        Outlet_Lookup.City   id: 48
+        Outlet_Lookup.State   id: 49
+        Shop_facts_id   id: 50
+        Article_id   id: 51
+        Color_code   id: 52
+        Week_id   id: 53
+        Shop_id   id: 54
+        Margin   id: 55
+        Amount_sold   id: 56
+        Quantity_sold   id: 57
+        Article_color_lookup_id   id: 58
+        Article_id   id: 59
+        Color_code   id: 60
+        Article_label   id: 61
+        Color_label   id: 62
+        Category   id: 63
+        Sale_price   id: 64
+        Family_name   id: 65
+        Family_code   id: 66
+        Agg_yr_qt_rn_st_ln_ca_sr.agg2_id   id: 67
+        Agg_yr_qt_rn_st_ln_ca_sr.Yr   id: 68
+        Agg_yr_qt_rn_st_ln_ca_sr.Qtr   id: 69
+        Agg_yr_qt_rn_st_ln_ca_sr.State   id: 70
+        Agg_yr_qt_rn_st_ln_ca_sr.Line   id: 71
+        Agg_yr_qt_rn_st_ln_ca_sr.Category   id: 72
+        Agg_yr_qt_rn_st_ln_ca_sr.Sales_revenue   id: 73
+        Article_lookup_criteria_id   id: 74
+        Article_id   id: 75
+        Criteria   id: 76
+        Criteria_type   id: 77
+        Criteria_type_label   id: 78
+        Criteria_label   id: 79
+
+    Joins
+
+        UnknownTable_16.Promotion_id=UnknownTable_15.Promotion_id   id: 112 
+        UnknownTable_15.Week_id=Calendar_year_lookup.Week_id   id: 113 
+        Outlet_Lookup.Shop_id=UnknownTable_4.Shop_id   id: 114 
+        UnknownTable_9.Article_id=UnknownTable_21.Article_id   id: 117 
+        UnknownTable_21.Article_id=UnknownTable_4.Article_id   id: 118 
+        UnknownTable_21.Article_id=UnknownTable_15.Article_id   id: 120 
+        UnknownTable_7.Article_id=UnknownTable_4.Article_id and UnknownTable_7.Color_code=UnknownTable_4.Color_code   id: 121 
+        UnknownTable_4.Week_id=Calendar_year_lookup.Week_id   id: 122 
+        UnknownTable_15.Article_id=UnknownTable_4.Article_id   id: 125 
+    
+    Contexts
+    
+        Shop facts   id: 46, description: None, joins: 114, 118, 121, 122, 125 
+        Promotions   id: 45, description: None, joins: 112, 113, 117, 120 
+
+    Stored Procedure Parameters
+
+        None found

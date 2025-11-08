@@ -1,0 +1,182 @@
+
+    
+    Universe Manifest created by pyunv 0.3.0
+        
+        Name: universe_xir2
+        Filename: universe_xir2.unv
+        Description: This is the first sample universe for PyUnv tests. It uses the pyunv_a database.
+        Domain: None
+
+    General Information
+
+        Created by: peckhda on 2009-09-26
+        Modified by: peckhda on 2009-09-27
+        Comments: These are comments for the universe_xir2 universe.
+        Revision 0
+        Statistics: 7 classes
+                    33 objects
+                    8 tables
+                    3 aliases
+                    7 joins
+                    2 contexts
+                    6 conditions
+
+    Connection
+
+        Database engine: Generic ODBC3 datasource
+        Network layer: ODBC
+
+    Strategies
+
+        Object strategy: (Built-in) Standard Renaming
+
+    Controls
+
+        Query time limit: 37.0 minutes
+        Query row limit: 54321 rows
+        Cost estimate warning limit: 5.0 minutes
+        Long text limit: 1234 characters
+
+    SQL Parameters
+
+        ANSI92 = YES
+        OLAP_UNIVERSE = No
+        SAMPLE_PARAMETER1 = 999333
+        SAMPLE_PARAMETER2 = 999222
+
+    Links
+
+
+    Objects
+        
+        Public Orderinfo
+            Orderinfo Id   id: 9, visible: True, description: None, select: public.orderinfo.orderinfo_id, where: None
+            Orderinfo Id hidden   id: 38, visible: False, description: None, select: public.orderinfo.orderinfo_id, where: None
+            Customer Id   id: 10, visible: True, description: None, select: public.orderinfo.customer_id, where: None
+            Date Placed   id: 11, visible: True, description: None, select: public.orderinfo.date_placed, where: None
+            Date Shipped   id: 12, visible: True, description: None, select: public.orderinfo.date_shipped, where: None
+            Shipping   id: 13, visible: True, description: None, select: public.orderinfo.shipping, where: None
+                     
+        Public Orderline
+            Orderinfo Id   id: 1, visible: True, description: None, select: public.orderline.orderinfo_id, where: None
+            Item Id   id: 2, visible: True, description: None, select: public.orderline.item_id, where: None
+            Quantity   id: 3, visible: True, description: None, select: public.orderline.quantity, where: None
+                           
+        Public Customer2
+            Customer Id   id: 30, visible: False, description: None, select: public.customer.customer_id, where: None
+            Title   id: 31, visible: False, description: None, select: public.customer.title, where: None
+            Fname   id: 32, visible: False, description: None, select: public.customer.fname, where: None
+            Lname   id: 33, visible: False, description: None, select: public.customer.lname, where: None
+            Addressline   id: 34, visible: False, description: None, select: public.customer.addressline, where: None
+            Town   id: 35, visible: False, description: None, select: public.customer.town, where: None
+            Zipcode   id: 36, visible: False, description: None, select: public.customer.zipcode, where: None
+            Phone   id: 37, visible: False, description: None, select: public.customer.phone, where: None
+                      
+        Public Customer
+            Customer Id   id: 14, visible: True, description: None, select: public.customer.customer_id, where: None
+            Title   id: 15, visible: True, description: None, select: public.customer.title, where: None
+            Fname   id: 16, visible: True, description: None, select: public.customer.fname, where: None
+            Lname   id: 17, visible: True, description: None, select: public.customer.lname, where: None
+            Addressline   id: 18, visible: True, description: None, select: public.customer.addressline, where: None
+            Town   id: 19, visible: True, description: None, select: public.customer.town, where: None
+            Zipcode   id: 20, visible: True, description: None, select: public.customer.zipcode, where: None
+            Phone   id: 21, visible: True, description: None, select: public.customer.phone, where: None
+                      
+        Public Item
+            Item Id   id: 22, visible: True, description: None, select: public.item.item_id, where: None
+            Description   id: 23, visible: True, description: None, select: public.item.description, where: None
+            Cost Price   id: 24, visible: True, description: None, select: public.item.cost_price, where: None
+            Sell Price   id: 25, visible: True, description: None, select: public.item.sell_price, where: None
+                     
+        Public Stock
+            Item Id   id: 28, visible: True, description: None, select: public.stock.item_id, where: None
+            Quantity   id: 29, visible: True, description: None, select: public.stock.quantity, where: None
+                          
+        Public Barcode
+            Barcode Ean   id: 26, visible: True, description: None, select: public.barcode.barcode_ean, where: None
+            Item Id   id: 27, visible: True, description: None, select: public.barcode.item_id, where: None
+                       
+    Conditions
+        
+        Public Orderinfo
+                     
+        Public Orderline
+                           
+        Public Customer2
+                      
+        Public Customer
+                      
+        Public Item
+            Expensive   id: 2, description: This condition is based on an object., where: Public Item.Sell Price > 1000
+            VeryExpensive   id: 4, description: This condition is based on a column, where: public.item.sell_price > 10000
+            Cheap   id: 3, description: This condition is based on an object, where: Public Item.Sell Price <= 1000
+            VeryCheap   id: 5, description: This condition is based on a column, where: public.item.sell_price < 5
+            VeryCheap Hidden   id: 7, description: This condition is based on a column, where: public.item.sell_price < 5
+                     
+        Public Stock
+            OutOfStock   id: 1, description: True when an item is out of stock., where: Public Stock.Quantity = 0
+                          
+        Public Barcode
+                       
+    Hierarchies
+
+
+    Tables
+
+        public.barcode   id: 1
+        public.customer   id: 2
+        public.item   id: 3
+        public.orderinfo   id: 4
+        public.orderline   id: 5
+        public.stock   id: 6
+        CheapItems   id: 7
+        ExpensiveItems   id: 8
+        SalesOrders (alias for public.orderinfo)   id: 9
+        Product (alias for public.item)   id: 10
+        LineItem (alias for public.orderline)   id: 11
+
+    Columns
+    
+        public.barcode.barcode_ean   id: 1
+        public.barcode.item_id   id: 2
+        public.customer.customer_id   id: 3
+        public.customer.title   id: 4
+        public.customer.fname   id: 5
+        public.customer.lname   id: 6
+        public.customer.addressline   id: 7
+        public.customer.town   id: 8
+        public.customer.zipcode   id: 9
+        public.customer.phone   id: 10
+        public.item.item_id   id: 11
+        public.item.description   id: 12
+        public.item.cost_price   id: 13
+        public.item.sell_price   id: 14
+        public.orderinfo.orderinfo_id   id: 15
+        public.orderinfo.customer_id   id: 16
+        public.orderinfo.date_placed   id: 17
+        public.orderinfo.date_shipped   id: 18
+        public.orderinfo.shipping   id: 19
+        public.orderline.orderinfo_id   id: 20
+        public.orderline.item_id   id: 21
+        public.orderline.quantity   id: 22
+        public.stock.item_id   id: 23
+        public.stock.quantity   id: 24
+
+    Joins
+
+        public.barcode.item_id=public.item.item_id   id: 9 
+        public.orderinfo.customer_id=public.customer.customer_id   id: 12 
+        public.item.item_id=public.orderline.item_id   id: 13 
+        public.stock.item_id=public.item.item_id   id: 14 
+        public.orderline.orderinfo_id=public.orderinfo.orderinfo_id   id: 15 
+        LineItem.item_id=Product.item_id   id: 18 
+        public.orderinfo.orderinfo_id=SalesOrders.orderinfo_id and public.orderinfo.customer_id=SalesOrders.customer_id   id: 19 
+    
+    Contexts
+    
+        ItemStock   id: 2, description: This is the ItemStock context., joins: 9, 14 
+        CustomerOrder   id: 1, description: This is the CustomerOrder context., joins: 12, 15 
+
+    Stored Procedure Parameters
+
+        None found
